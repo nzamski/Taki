@@ -8,6 +8,12 @@ public class ChangeDirectionCard extends Card {
   }
 
   @Override
+  public boolean isNextCardValid(Card nextCard) {
+    return nextCard instanceof ChangeDirectionCard || super.isNextCardValid(nextCard);
+  }
+
+
+  @Override
   public String toString() {
     return this.color().code + "Change Direction" + CardColor.RESET.code;
   }

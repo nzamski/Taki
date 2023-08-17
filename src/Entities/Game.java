@@ -17,7 +17,7 @@ public class Game implements Serializable {
   private DirectionIndex direction;
   private List<Player> players;
   private int numPlayers;
-  private int activePlayer;
+  private int activePlayerIndex;
   private int plusTwoMultiplier;
   private boolean isFinished;
   private boolean didPlayerExit;
@@ -29,7 +29,7 @@ public class Game implements Serializable {
     this.stack = new Deck();
     this.direction = DirectionIndex.FORWARD;
     this.players = new ArrayList<>();
-    this.activePlayer = 0;
+    this.activePlayerIndex = 0;
     this.plusTwoMultiplier = 0;
     this.isFinished = false;
     this.didPlayerExit = false;
@@ -116,7 +116,7 @@ public class Game implements Serializable {
       }
 
       IOOperations.print("Top card is " + this.pile.topCard());
-      Player currPlayer = this.players.get(this.activePlayer());
+      Player currPlayer = this.activePlayer();
       Card pickedCard = currPlayer.pickValidCard(this.pile.topCard(), false);
       this.playMove(pickedCard, currPlayer);
       IOOperations.print("");
@@ -124,9 +124,7 @@ public class Game implements Serializable {
       if (currPlayer.isOutOfCards()) {
         IOOperations.print(currPlayer.name() + " is the winner!");
         this.finishGame();
-      }
-
-      if (!this.didPlayerExit()) {
+      } else if (!this.didPlayerExit()) {
         this.advanceActivePlayer(1);
       }
     }
@@ -200,8 +198,13 @@ public class Game implements Serializable {
       pickedCard = currPlayer.pickValidCard(lastCard, true);
     }
 
-    IOOperations.print("Taki closed");
-    this.playMove(lastCard, currPlayer);
+    if (lastCard instanceof TakiCard || lastCard instanceof SuperTakiCard) {
+      this.advanceActivePlayer(1);
+    } else {
+      IOOperations.print("Taki closed");
+    }
+
+    this.playMove(lastCard, this.activePlayer());
   }
 
   private void drawCards(Player currPlayer) throws CannotDrawCardException {
@@ -244,13 +247,13 @@ public class Game implements Serializable {
     this.numPlayers = numPlayers;
   }
 
-  public int activePlayer() {
-    return this.activePlayer;
+  public Player activePlayer() {
+    return this.players.get(this.activePlayerIndex);
   }
 
   public void advanceActivePlayer(int step) {
-    this.activePlayer =
-        (step * this.direction().index + this.activePlayer + this.numPlayers()) % this.numPlayers();
+    this.activePlayerIndex =
+        (step * this.direction().index + this.activePlayerIndex + this.numPlayers()) % this.numPlayers();
   }
 
   public int plusTwoMultiplier() {

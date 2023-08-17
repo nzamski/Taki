@@ -17,6 +17,12 @@ public class ChangeColorCard extends Card implements ColorChangeable {
   }
 
   @Override
+  public boolean isNextCardValid(Card nextCard) {
+    return nextCard instanceof ChangeColorCard || super.isNextCardValid(nextCard);
+  }
+
+
+  @Override
   public String toString() {
     return this.color().code + "Change Color" + CardColor.RESET.code;
   }
