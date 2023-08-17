@@ -1,5 +1,7 @@
 package Cards;
 
+import Entities.CardsVisitor;
+
 public class StopCard extends Card {
   public static final int AMOUNT = 2;
 
@@ -10,6 +12,11 @@ public class StopCard extends Card {
   @Override
   public boolean isNextCardValid(Card nextCard) {
     return nextCard instanceof StopCard || super.isNextCardValid(nextCard);
+  }
+
+  @Override
+  public void play(CardsVisitor cardsVisitor) {
+    cardsVisitor.visitStopCard(this);
   }
 
   @Override

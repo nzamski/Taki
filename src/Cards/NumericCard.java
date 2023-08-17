@@ -1,5 +1,7 @@
 package Cards;
 
+import Entities.CardsVisitor;
+
 public class NumericCard extends Card {
   private CardNumber number;
   public static final int AMOUNT = 2;
@@ -21,6 +23,11 @@ public class NumericCard extends Card {
   public boolean isNextCardValid(Card nextCard) {
     return (nextCard instanceof NumericCard && this.number == ((NumericCard) nextCard).number)
         || super.isNextCardValid(nextCard);
+  }
+
+  @Override
+  public void play(CardsVisitor cardsVisitor) {
+    cardsVisitor.visitNumericCard(this);
   }
 
   @Override

@@ -1,5 +1,8 @@
 package Cards;
 
+import Entities.CardsVisitor;
+import Exceptions.CannotDrawCardException;
+
 public class TakiCard extends Card {
   public static final int AMOUNT = 2;
 
@@ -12,6 +15,11 @@ public class TakiCard extends Card {
     return nextCard instanceof TakiCard
         || nextCard instanceof SuperTakiCard
         || super.isNextCardValid(nextCard);
+  }
+
+  @Override
+  public void play(CardsVisitor cardsVisitor) throws CannotDrawCardException {
+    cardsVisitor.visitTakiCard(this);
   }
 
   @Override

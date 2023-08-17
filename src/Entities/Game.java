@@ -109,6 +109,7 @@ public class Game implements Serializable {
   }
 
   public void runGame() throws CannotDrawCardException {
+    CardsVisitor cardsVisitor = new PlayCardsVisitor(this);
     while (!this.isFinished() && !this.didPlayerExit()) {
       if (this.stack.isEmpty()) {
         IOOperations.print("Stack refilled");
@@ -118,7 +119,7 @@ public class Game implements Serializable {
       IOOperations.print("Top card is " + this.pile.topCard());
       Player currPlayer = this.activePlayer();
       Card pickedCard = currPlayer.pickValidCard(this.pile.topCard(), false);
-      this.playMove(pickedCard, currPlayer);
+      this.playMove(pickedCard, cardsVisitor);
       IOOperations.print("");
 
       if (currPlayer.isOutOfCards()) {
@@ -130,48 +131,11 @@ public class Game implements Serializable {
     }
   }
 
-  private void playMove(Card pickedCard, Player currPlayer) throws CannotDrawCardException {
-    if (pickedCard instanceof NumericCard) {
-      this.pile.insertCard(pickedCard);
-    } else if (pickedCard instanceof StopCard) {
-      this.advanceActivePlayer(1);
-      this.pile.insertCard(pickedCard);
-    } else if (pickedCard instanceof PlusTwoCard) {
-      this.increasePlusTwoMultiplier();
-      this.pile.insertCard(pickedCard);
-    } else if (pickedCard instanceof ChangeDirectionCard) {
-      this.toggleDirection();
-      this.pile.insertCard(pickedCard);
-    } else if (pickedCard instanceof ChangeColorCard) {
-      pickedCard.changeColor(IOOperations.getColor());
-      this.pile.insertCard(pickedCard);
-    } else if (pickedCard instanceof TakiCard) {
-      this.openAndCloseTaki(pickedCard, currPlayer);
-    } else if (pickedCard instanceof SuperTakiCard) {
-      if (this.pile.topCard().color() == CardColor.NO_COLOR) {
-        pickedCard.changeColor(IOOperations.getColor());
-      } else {
-        pickedCard.changeColor(this.pile.topCard().color());
-      }
-
-      this.openAndCloseTaki(pickedCard, currPlayer);
-    } else if (pickedCard instanceof PlusCard) {
-      this.pile.insertCard(pickedCard);
-      IOOperations.print("Top card is " + this.pile.topCard());
-      pickedCard = currPlayer.pickValidCard(this.pile.topCard(), false);
-      this.playMove(pickedCard, currPlayer);
-    } else if (pickedCard instanceof KingCard) {
-      this.deactivatePlusTwoMode();
-      this.pile.insertCard(pickedCard);
-      IOOperations.print("Top card is " + this.pile.topCard());
-      pickedCard = currPlayer.pickValidCard(this.pile.topCard(), false);
-      this.playMove(pickedCard, currPlayer);
-    } else if (pickedCard instanceof SaveGameCard) {
-      this.changeDidPlayerExit(true);
-    } else if (pickedCard == null) {
-      this.drawCards(currPlayer);
+  public void playMove(Card card, CardsVisitor cardsVisitor) throws CannotDrawCardException {
+    if (card == null) {
+      this.drawCards(this.activePlayer());
     } else {
-      IOOperations.print("Invalid card?!");
+      card.play(cardsVisitor);
     }
   }
 
@@ -187,26 +151,6 @@ public class Game implements Serializable {
     this.stack.shuffleDeck();
   }
 
-  private void openAndCloseTaki(Card pickedCard, Player currPlayer) throws CannotDrawCardException {
-    Card lastCard = this.pile.topCard();
-    IOOperations.print("Taki open");
-
-    while (pickedCard != null) {
-      this.pile.insertCard(lastCard);
-      lastCard = pickedCard;
-      IOOperations.print("Top card is " + lastCard);
-      pickedCard = currPlayer.pickValidCard(lastCard, true);
-    }
-
-    if (lastCard instanceof TakiCard || lastCard instanceof SuperTakiCard) {
-      this.advanceActivePlayer(1);
-    } else {
-      IOOperations.print("Taki closed");
-    }
-
-    this.playMove(lastCard, this.activePlayer());
-  }
-
   private void drawCards(Player currPlayer) throws CannotDrawCardException {
     if (this.plusTwoMultiplier() == 0) {
       currPlayer.addCard(this.stack.drawCard());
@@ -218,6 +162,14 @@ public class Game implements Serializable {
       IOOperations.print("You've taken " + this.plusTwoMultiplier() * 2 + " cards.");
       this.deactivatePlusTwoMode();
     }
+  }
+
+  public Deck stack() {
+    return this.stack;
+  }
+
+  public Deck pile() {
+    return this.pile;
   }
 
   public DirectionIndex direction() {
@@ -253,7 +205,8 @@ public class Game implements Serializable {
 
   public void advanceActivePlayer(int step) {
     this.activePlayerIndex =
-        (step * this.direction().index + this.activePlayerIndex + this.numPlayers()) % this.numPlayers();
+        (step * this.direction().index + this.activePlayerIndex + this.numPlayers())
+            % this.numPlayers();
   }
 
   public int plusTwoMultiplier() {

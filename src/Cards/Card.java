@@ -1,5 +1,8 @@
 package Cards;
 
+import Entities.CardsVisitor;
+import Exceptions.CannotDrawCardException;
+
 import java.io.Serializable;
 
 public abstract class Card implements Cloneable, Serializable {
@@ -20,6 +23,8 @@ public abstract class Card implements Cloneable, Serializable {
   public boolean isNextCardValid(Card nextCard) {
     return nextCard.color() == CardColor.NO_COLOR || nextCard.color() == this.color();
   }
+
+  public abstract void play(CardsVisitor cardsVisitor) throws CannotDrawCardException;
 
   @Override
   public Card clone() throws CloneNotSupportedException {

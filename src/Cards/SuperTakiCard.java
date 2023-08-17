@@ -1,5 +1,8 @@
 package Cards;
 
+import Entities.CardsVisitor;
+import Exceptions.CannotDrawCardException;
+
 public class SuperTakiCard extends Card implements ColorChangeable {
   public static final int AMOUNT = 2;
 
@@ -20,6 +23,11 @@ public class SuperTakiCard extends Card implements ColorChangeable {
     return nextCard instanceof SuperTakiCard
         || nextCard instanceof TakiCard
         || super.isNextCardValid(nextCard);
+  }
+
+  @Override
+  public void play(CardsVisitor cardsVisitor) throws CannotDrawCardException {
+    cardsVisitor.visitSuperTakiCard(this);
   }
 
   @Override
