@@ -64,7 +64,7 @@ public class PlayCardsVisitor implements CardsVisitor {
       game.placeCard(lastCard);
       lastCard = pickedCard;
       IOOperations.print("Top card is " + lastCard);
-      pickedCard = game.activePlayer().pickValidCard(lastCard, true);
+      pickedCard = game.activePlayer().pickValidCard(lastCard, true, false);
     }
 
     if (lastCard instanceof TakiCard || lastCard instanceof SuperTakiCard) {
@@ -80,7 +80,7 @@ public class PlayCardsVisitor implements CardsVisitor {
   public void visitPlusCard(PlusCard card) throws CannotDrawCardException {
     game.placeCard(card);
     IOOperations.print("Top card is " + game.leadingCard());
-    Card pickedCard = game.activePlayer().pickValidCard(game.leadingCard(), false);
+    Card pickedCard = game.activePlayer().pickValidCard(game.leadingCard(), false, false);
     game.playMove(pickedCard, this);
   }
 
@@ -89,7 +89,7 @@ public class PlayCardsVisitor implements CardsVisitor {
     game.deactivatePlusTwoMode();
     game.placeCard(card);
     IOOperations.print("Top card is " + game.leadingCard());
-    Card pickedCard = game.activePlayer().pickValidCard(game.leadingCard(), false);
+    Card pickedCard = game.activePlayer().pickValidCard(game.leadingCard(), false, false);
     game.playMove(pickedCard, this);
   }
 

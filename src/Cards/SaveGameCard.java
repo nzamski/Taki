@@ -10,6 +10,6 @@ public class SaveGameCard extends Card {
 
   @Override
   public void play(CardsVisitor cardsVisitor) {
-    cardsVisitor.visitSaveGameCard(this);
+    cardsVisitor.visitSaveGameCard();
   }
 }

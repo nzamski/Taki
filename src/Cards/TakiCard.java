@@ -24,6 +24,6 @@ public class TakiCard extends Card {
 
   @Override
   public String toString() {
-    return this.color().code + "Taki" + CardColor.RESET.code;
+    return this.color().code + "Taki" + CardColor.RESET_CODE;
   }
 }

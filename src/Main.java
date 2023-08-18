@@ -21,7 +21,7 @@ public class Main {
             game.initGame();
             isCodeValid = true;
           } catch (CloneNotSupportedException | CannotDrawCardException exception) {
-            IOOperations.print("Cannot initialize game -> " + exception.getMessage());
+            IOOperations.printError("Cannot initialize game -> " + exception.getMessage());
           }
         }
 
@@ -33,17 +33,17 @@ public class Main {
             isCodeValid = true;
             IOOperations.print("Game loaded.");
           } catch (IOException | ClassNotFoundException exception) {
-            IOOperations.print("Cannot load game -> " + exception.getMessage());
+            IOOperations.printError("Cannot load game -> " + exception.getMessage());
             menuItemCode = IOOperations.getMenuItemCode();
           }
 
           if (game.isFinished()) {
-            IOOperations.print("Cannot load the game, it's already over");
+            IOOperations.printError("Cannot load the game, it's already over");
             menuItemCode = IOOperations.getMenuItemCode();
           }
         }
         default -> {
-          IOOperations.print("Invalid code, try again.");
+          IOOperations.printError("Invalid code, try again.");
           menuItemCode = IOOperations.getMenuItemCode();
         }
       }
@@ -59,7 +59,7 @@ public class Main {
         GameStorage.saveGame(game, filePath);
         isPathValid = true;
       } catch (IOException exception) {
-        IOOperations.print("Cannot save game -> " + exception.getMessage());
+        IOOperations.printError("Cannot save game -> " + exception.getMessage());
         filePath = IOOperations.getString("Enter the file path to save to:");
       }
     }
@@ -67,16 +67,16 @@ public class Main {
 
   public static void main(String[] args) {
     getGame();
+    game.changeDidPlayerExit(false);
     IOOperations.printWelcome();
 
     try {
       game.runGame();
     } catch (CannotDrawCardException exception) {
-      IOOperations.print("Cannot proceed game run -> " + exception.getMessage());
+      IOOperations.printError("Cannot proceed game run -> " + exception.getMessage());
     }
 
-    if (game.didPlayerExit()) {
-      game.changeDidPlayerExit(false);
+    if (game.didPlayerExit() && IOOperations.getUserApproval("Would you like to save the game?")) {
       saveValidGame();
       IOOperations.print("Game saved.");
     }

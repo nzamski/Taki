@@ -41,7 +41,7 @@ public class Game implements Serializable {
 
   private void loadStack() throws CloneNotSupportedException {
     for (CardColor cardColor : CardColor.values()) {
-      if (cardColor != CardColor.NO_COLOR && cardColor != CardColor.RESET) {
+      if (cardColor != CardColor.NO_COLOR) {
         for (CardNumber cardNumber : CardNumber.values()) {
           this.stack.loadMass(new NumericCard(cardColor, cardNumber), NumericCard.AMOUNT);
         }
@@ -84,7 +84,7 @@ public class Game implements Serializable {
         this.changeNumPlayers(IOOperations.getNumber("How many players?"));
         isNumPlayersValid = true;
       } catch (InvalidNumOfPlayers exception) {
-        IOOperations.print(exception.getMessage());
+        IOOperations.printError(exception.getMessage());
       }
     }
 
@@ -119,7 +119,7 @@ public class Game implements Serializable {
 
       IOOperations.print("Top card is " + this.pile.topCard());
       Player currPlayer = this.activePlayer();
-      Card pickedCard = currPlayer.pickValidCard(this.pile.topCard(), false);
+      Card pickedCard = currPlayer.pickValidCard(this.pile.topCard(), false, true);
       this.playMove(pickedCard, cardsVisitor);
       IOOperations.print("");
 

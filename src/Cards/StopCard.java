@@ -21,6 +21,6 @@ public class StopCard extends Card {
 
   @Override
   public String toString() {
-    return this.color().code + "Stop" + CardColor.RESET.code;
+    return this.color().code + "Stop" + CardColor.RESET_CODE;
   }
 }

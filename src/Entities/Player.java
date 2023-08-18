@@ -30,22 +30,22 @@ public class Player implements Serializable {
         this.changeAge(age);
         isAgeValid = true;
       } catch (InvalidPlayerAge exception) {
-        IOOperations.print(exception.getMessage());
+        IOOperations.printError(exception.getMessage());
       }
     }
   }
 
-  public Card pickValidCard(Card topCard, boolean canEndTurn) {
+  public Card pickValidCard(Card topCard, boolean canEndTurn, boolean canExitGame) {
     Card pickedCard = null;
     boolean isCardValid = false;
     boolean isHandShown = true;
 
     while (!isCardValid) {
       try {
-        pickedCard = getCardFromPlayer(topCard, isHandShown, canEndTurn);
+        pickedCard = getCardFromPlayer(topCard, isHandShown, canEndTurn, canExitGame);
         isCardValid = true;
       } catch (IllegalMoveException | IndexOutOfBoundsException exception) {
-        IOOperations.print("Sorry, that's an illegal move.");
+        IOOperations.printError(exception.getMessage());
         isHandShown = false;
       }
     }
@@ -53,7 +53,8 @@ public class Player implements Serializable {
     return pickedCard;
   }
 
-  private Card getCardFromPlayer(Card topCard, boolean isHandShown, boolean canEndTurn)
+  private Card getCardFromPlayer(
+      Card topCard, boolean isHandShown, boolean canEndTurn, boolean canExitGame)
       throws IllegalMoveException {
     final int SAVE_GAME_CODE = -1;
     final int DRAW_CARD_CODE = 0;
@@ -61,7 +62,11 @@ public class Player implements Serializable {
 
     if (isHandShown) {
       IOOperations.print(String.format("Hey %s, this is your hand:", this.name));
-      IOOperations.print("(" + SAVE_GAME_CODE + ") EXIT AND SAVE GAME");
+
+      if (canExitGame) {
+        IOOperations.print("(" + SAVE_GAME_CODE + ") EXIT AND SAVE GAME");
+      }
+
       if (canEndTurn) {
         IOOperations.print("(" + END_TURN_CODE + ") END TURN");
       } else {
@@ -76,13 +81,13 @@ public class Player implements Serializable {
 
     int chosenCode = IOOperations.getNumber("What would you like to play?");
 
-    if (chosenCode == SAVE_GAME_CODE) {
+    if (canExitGame && chosenCode == SAVE_GAME_CODE) {
       return new SaveGameCard();
     } else if (canEndTurn && chosenCode == END_TURN_CODE
         || !canEndTurn && chosenCode == DRAW_CARD_CODE) {
       return null;
     } else if (chosenCode < 0 || chosenCode > this.hand.size()) {
-      throw new IndexOutOfBoundsException("Card index isn't valid");
+      throw new IllegalMoveException("Card index isn't valid");
     }
 
     Card pickedCard = this.removeCard(chosenCode - 1);

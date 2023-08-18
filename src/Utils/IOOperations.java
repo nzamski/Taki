@@ -13,6 +13,13 @@ public class IOOperations {
     System.out.println(output);
   }
 
+  public static void printError(String error) {
+    final String ERROR_CODE = "\033[1;31m";
+    final String RESET_CODE = "\033[0m";
+
+    print(ERROR_CODE + error + RESET_CODE);
+  }
+
   public static String getString() {
     return USER_IO.nextLine();
   }
@@ -20,7 +27,7 @@ public class IOOperations {
   public static String getString(String message) {
     print(message);
 
-    return USER_IO.nextLine();
+    return getString();
   }
 
   public static int getNumber() {
@@ -35,6 +42,14 @@ public class IOOperations {
 
   public static char getCharacter() {
     return getString().toUpperCase().charAt(0);
+  }
+
+  public static boolean getUserApproval(String message) {
+    final String USER_APPROVAL = "y";
+
+    print(message + " (" + USER_APPROVAL + "/n)?");
+
+    return getString().equalsIgnoreCase(USER_APPROVAL);
   }
 
   public static void printWelcome() {

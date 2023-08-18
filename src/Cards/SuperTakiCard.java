@@ -29,6 +29,6 @@ public class SuperTakiCard extends Card implements ColorChangeable {
 
   @Override
   public String toString() {
-    return this.color().code + "Super Taki" + CardColor.RESET.code;
+    return this.color().code + "Super Taki" + CardColor.RESET_CODE;
   }
 }

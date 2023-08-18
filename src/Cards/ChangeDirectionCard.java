@@ -21,6 +21,6 @@ public class ChangeDirectionCard extends Card {
 
   @Override
   public String toString() {
-    return this.color().code + "Change Direction" + CardColor.RESET.code;
+    return this.color().code + "Change Direction" + CardColor.RESET_CODE;
   }
 }

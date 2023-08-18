@@ -32,6 +32,6 @@ public class NumericCard extends Card {
 
   @Override
   public String toString() {
-    return this.color().code + this.number().number + CardColor.RESET.code;
+    return this.color().code + this.number().number + CardColor.RESET_CODE;
   }
 }
