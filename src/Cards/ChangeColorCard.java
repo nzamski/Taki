@@ -10,11 +10,8 @@ public class ChangeColorCard extends Card implements ColorChangeable {
   }
 
   @Override
-  public boolean resetColor() {
-    CardColor oldColor = this.color();
+  public void resetColor() {
     this.changeColor(CardColor.NO_COLOR);
-
-    return this.color() != oldColor;
   }
 
   @Override

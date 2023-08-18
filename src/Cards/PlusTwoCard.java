@@ -13,11 +13,13 @@ public class PlusTwoCard extends Card {
 
   @Override
   public boolean isNextCardValid(Card nextCard) {
-    if (!this.isActive()) {
-      return super.isNextCardValid(nextCard);
+    if (nextCard instanceof PlusTwoCard) {
+      return true;
+    } else if (this.isActive()) {
+      return nextCard instanceof KingCard;
     }
 
-    return nextCard instanceof PlusTwoCard || nextCard instanceof KingCard;
+    return super.isNextCardValid(nextCard);
   }
 
   public boolean isActive() {

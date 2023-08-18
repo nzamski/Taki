@@ -13,6 +13,6 @@ public interface CardsVisitor {
     void visitSuperTakiCard(SuperTakiCard card) throws CannotDrawCardException;
     void visitPlusCard(PlusCard card) throws CannotDrawCardException;
     void visitKingCard(KingCard card) throws CannotDrawCardException;
-    void visitSaveGameCard(SaveGameCard card);
+    void visitSaveGameCard();
 
 }

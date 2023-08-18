@@ -34,20 +34,7 @@ public class IOOperations {
   }
 
   public static char getCharacter() {
-    return getString().charAt(0);
-  }
-
-  public static char getCharacter(String message) {
-    print(message);
-
-    return getCharacter();
-  }
-
-  public static boolean getUserApproval(String message) {
-    final String USER_APPROVAL = "y";
-    print(message + " (" + USER_APPROVAL + "/n)?");
-
-    return getString().equalsIgnoreCase(USER_APPROVAL);
+    return getString().toUpperCase().charAt(0);
   }
 
   public static void printWelcome() {

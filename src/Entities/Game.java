@@ -110,6 +110,7 @@ public class Game implements Serializable {
 
   public void runGame() throws CannotDrawCardException {
     CardsVisitor cardsVisitor = new PlayCardsVisitor(this);
+
     while (!this.isFinished() && !this.didPlayerExit()) {
       if (this.stack.isEmpty()) {
         IOOperations.print("Stack refilled");
@@ -164,12 +165,12 @@ public class Game implements Serializable {
     }
   }
 
-  public Deck stack() {
-    return this.stack;
+  public Card leadingCard() throws CannotDrawCardException {
+    return this.pile.topCard();
   }
 
-  public Deck pile() {
-    return this.pile;
+  public void placeCard(Card card) {
+    this.pile.insertCard(card);
   }
 
   public DirectionIndex direction() {

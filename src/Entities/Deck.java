@@ -13,10 +13,6 @@ import java.util.Stack;
 public class Deck implements Serializable {
   private final Stack<Card> cards;
 
-  public Deck(Stack<Card> cards) {
-    this.cards = cards;
-  }
-
   public Deck() {
     this.cards = new Stack<>();
   }
