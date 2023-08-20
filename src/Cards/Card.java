@@ -24,6 +24,10 @@ public abstract class Card implements Cloneable, Serializable {
     return nextCard.color() == CardColor.NO_COLOR || nextCard.color() == this.color();
   }
 
+  public boolean isCardValidInTakiRun(CardColor takiColor) {
+    return this.color() == takiColor || this.color() == CardColor.NO_COLOR;
+  }
+
   public abstract void play(CardsVisitor cardsVisitor) throws CannotDrawCardException;
 
   @Override

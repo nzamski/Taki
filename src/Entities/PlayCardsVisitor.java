@@ -42,7 +42,7 @@ public class PlayCardsVisitor implements CardsVisitor {
 
   @Override
   public void visitTakiCard(TakiCard card) throws CannotDrawCardException {
-    this.openAndCloseTaki(card);
+    this.openAndCloseTaki(card, card.color());
   }
 
   @Override
@@ -53,10 +53,11 @@ public class PlayCardsVisitor implements CardsVisitor {
       card.changeColor(game.leadingCard().color());
     }
 
-    this.openAndCloseTaki(card);
+    this.openAndCloseTaki(card, card.color());
   }
 
-  private void openAndCloseTaki(Card pickedCard) throws CannotDrawCardException {
+  private void openAndCloseTaki(Card pickedCard, CardColor takiColor)
+      throws CannotDrawCardException {
     Card lastCard = game.leadingCard();
     IOOperations.print("Taki open");
 
@@ -64,7 +65,7 @@ public class PlayCardsVisitor implements CardsVisitor {
       game.placeCard(lastCard);
       lastCard = pickedCard;
       IOOperations.print("Top card is " + lastCard);
-      pickedCard = game.activePlayer().pickValidCard(lastCard, true, false);
+      pickedCard = game.activePlayer().pickValidCard(lastCard, true, false, takiColor);
     }
 
     if (lastCard instanceof TakiCard || lastCard instanceof SuperTakiCard) {
@@ -80,7 +81,7 @@ public class PlayCardsVisitor implements CardsVisitor {
   public void visitPlusCard(PlusCard card) throws CannotDrawCardException {
     game.placeCard(card);
     IOOperations.print("Top card is " + game.leadingCard());
-    Card pickedCard = game.activePlayer().pickValidCard(game.leadingCard(), false, false);
+    Card pickedCard = game.activePlayer().pickValidCard(game.leadingCard(), false, false, null);
     game.playMove(pickedCard, this);
   }
 
@@ -89,8 +90,11 @@ public class PlayCardsVisitor implements CardsVisitor {
     game.deactivatePlusTwoMode();
     game.placeCard(card);
     IOOperations.print("Top card is " + game.leadingCard());
-    Card pickedCard = game.activePlayer().pickValidCard(game.leadingCard(), false, false);
-    game.playMove(pickedCard, this);
+    Card pickedCard = game.activePlayer().pickValidCard(game.leadingCard(), true, false, null);
+
+    if (pickedCard != null) {
+      game.playMove(pickedCard, this);
+    }
   }
 
   @Override

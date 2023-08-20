@@ -1,6 +1,7 @@
 package Entities;
 
 import Cards.Card;
+import Cards.CardColor;
 import Cards.SaveGameCard;
 import Exceptions.IllegalMoveException;
 import Exceptions.InvalidPlayerAge;
@@ -35,14 +36,14 @@ public class Player implements Serializable {
     }
   }
 
-  public Card pickValidCard(Card topCard, boolean canEndTurn, boolean canExitGame) {
+  public Card pickValidCard(Card topCard, boolean canEndTurn, boolean canExitGame, CardColor colorConstraint) {
     Card pickedCard = null;
     boolean isCardValid = false;
     boolean isHandShown = true;
 
     while (!isCardValid) {
       try {
-        pickedCard = getCardFromPlayer(topCard, isHandShown, canEndTurn, canExitGame);
+        pickedCard = getCardFromPlayer(topCard, isHandShown, canEndTurn, canExitGame, colorConstraint);
         isCardValid = true;
       } catch (IllegalMoveException | IndexOutOfBoundsException exception) {
         IOOperations.printError(exception.getMessage());
@@ -54,14 +55,18 @@ public class Player implements Serializable {
   }
 
   private Card getCardFromPlayer(
-      Card topCard, boolean isHandShown, boolean canEndTurn, boolean canExitGame)
+      Card topCard,
+      boolean isHandShown,
+      boolean canEndTurn,
+      boolean canExitGame,
+      CardColor colorConstraint)
       throws IllegalMoveException {
     final int SAVE_GAME_CODE = -1;
     final int DRAW_CARD_CODE = 0;
     final int END_TURN_CODE = 0;
 
     if (isHandShown) {
-      IOOperations.print(String.format("Hey %s, this is your hand:", this.name));
+      IOOperations.print(String.format("Hey %s, this is your hand:", this.name()));
 
       if (canExitGame) {
         IOOperations.print("(" + SAVE_GAME_CODE + ") EXIT AND SAVE GAME");
@@ -92,7 +97,8 @@ public class Player implements Serializable {
 
     Card pickedCard = this.removeCard(chosenCode - 1);
 
-    if (!topCard.isNextCardValid(pickedCard)) {
+    if ((colorConstraint != null && !pickedCard.isCardValidInTakiRun(colorConstraint))
+        || !topCard.isNextCardValid(pickedCard)) {
       this.addCard(chosenCode - 1, pickedCard);
       throw new IllegalMoveException("Cannot be placed upon current top card");
     }

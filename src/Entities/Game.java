@@ -119,7 +119,7 @@ public class Game implements Serializable {
 
       IOOperations.print("Top card is " + this.pile.topCard());
       Player currPlayer = this.activePlayer();
-      Card pickedCard = currPlayer.pickValidCard(this.pile.topCard(), false, true);
+      Card pickedCard = currPlayer.pickValidCard(this.pile.topCard(), false, true, null);
       this.playMove(pickedCard, cardsVisitor);
       IOOperations.print("");
 
