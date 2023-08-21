@@ -65,12 +65,13 @@ public class Game implements Serializable {
     Stack<Card> tempStack = new Stack<>();
     Card openingCard = this.stack.drawCard();
 
-    if (openingCard.color() == CardColor.NO_COLOR) {
+    while (openingCard.color() == CardColor.NO_COLOR) {
       tempStack.add(openingCard);
       openingCard = this.stack.drawCard();
     }
 
     this.pile.insertCard(openingCard);
+    
     for (Card card : tempStack) {
       this.stack.insertCard(card);
     }
