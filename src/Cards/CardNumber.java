@@ -9,9 +9,9 @@ public enum CardNumber {
   SEVEN("Seven"),
   EIGHT("Eight"),
   NINE("Nine");
-  public final String number;
+  public final String NUMBER;
 
   CardNumber(String number) {
-    this.number = number;
+    this.NUMBER = number;
   }
 }

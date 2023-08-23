@@ -7,13 +7,13 @@ public enum CardColor {
   YELLOW('Y', "\u001B[33m"),
   BLUE('B', "\u001B[34m");
 
-  public final char character;
-  public final String code;
+  public final char CHARACTER;
+  public final String CODE;
   public final static String RESET_CODE = "\033[0m";
 
   CardColor(char character, String code) {
-    this.character = character;
-    this.code = code;
+    this.CHARACTER = character;
+    this.CODE = code;
   }
 
   public static String getLegend() {
@@ -23,6 +23,6 @@ public enum CardColor {
             (%c) Red
             (%c) Yellow
             (%c) Blue""",
-        GREEN.character, RED.character, YELLOW.character, BLUE.character);
+        GREEN.CHARACTER, RED.CHARACTER, YELLOW.CHARACTER, BLUE.CHARACTER);
   }
 }

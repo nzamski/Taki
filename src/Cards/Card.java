@@ -37,6 +37,6 @@ public abstract class Card implements Cloneable, Serializable {
 
   @Override
   public String toString() {
-    return this.color().code + "Card" + CardColor.RESET_CODE;
+    return this.color().CODE + "Card" + CardColor.RESET_CODE;
   }
 }

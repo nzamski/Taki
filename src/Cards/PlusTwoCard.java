@@ -37,6 +37,6 @@ public class PlusTwoCard extends Card {
 
   @Override
   public String toString() {
-    return this.color().code + "Plus Two" + CardColor.RESET_CODE;
+    return this.color().CODE + "Plus Two" + CardColor.RESET_CODE;
   }
 }

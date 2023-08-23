@@ -3,10 +3,10 @@ package Cards;
 public enum DirectionIndex {
   FORWARD(1),
   BACKWARD(-1);
-  public final int index;
+  public final int INDEX;
 
   DirectionIndex(int index) {
-    this.index = index;
+    this.INDEX = index;
   }
 
   public DirectionIndex toggle() {

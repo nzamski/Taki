@@ -26,6 +26,6 @@ public class ChangeColorCard extends Card implements ColorChangeable {
 
   @Override
   public String toString() {
-    return this.color().code + "Change Color" + CardColor.RESET_CODE;
+    return this.color().CODE + "Change Color" + CardColor.RESET_CODE;
   }
 }

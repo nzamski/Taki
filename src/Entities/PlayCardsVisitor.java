@@ -5,39 +5,39 @@ import Exceptions.CannotDrawCardException;
 import Utils.IOOperations;
 
 public class PlayCardsVisitor implements CardsVisitor {
-  private final Game game;
+  private final Game GAME;
 
   public PlayCardsVisitor(Game game) {
-    this.game = game;
+    this.GAME = game;
   }
 
   @Override
   public void visitNumericCard(NumericCard card) {
-    game.placeCard(card);
+    GAME.placeCard(card);
   }
 
   @Override
   public void visitStopCard(StopCard card) {
-    game.advanceActivePlayer(1);
-    game.placeCard(card);
+    GAME.advanceActivePlayer(1);
+    GAME.placeCard(card);
   }
 
   @Override
   public void visitPlusTwoCard(PlusTwoCard card) {
-    game.increasePlusTwoMultiplier();
-    game.placeCard(card);
+    GAME.increasePlusTwoMultiplier();
+    GAME.placeCard(card);
   }
 
   @Override
   public void visitChangeDirectionCard(ChangeDirectionCard card) {
-    game.toggleDirection();
-    game.placeCard(card);
+    GAME.toggleDirection();
+    GAME.placeCard(card);
   }
 
   @Override
   public void visitChangeColorCard(ChangeColorCard card) {
     card.changeColor(IOOperations.getColor());
-    game.placeCard(card);
+    GAME.placeCard(card);
   }
 
   @Override
@@ -47,10 +47,10 @@ public class PlayCardsVisitor implements CardsVisitor {
 
   @Override
   public void visitSuperTakiCard(SuperTakiCard card) throws CannotDrawCardException {
-    if (game.leadingCard().color() == CardColor.NO_COLOR) {
+    if (GAME.leadingCard().color() == CardColor.NO_COLOR) {
       card.changeColor(IOOperations.getColor());
     } else {
-      card.changeColor(game.leadingCard().color());
+      card.changeColor(GAME.leadingCard().color());
     }
 
     this.openAndCloseTaki(card, card.color());
@@ -58,47 +58,47 @@ public class PlayCardsVisitor implements CardsVisitor {
 
   private void openAndCloseTaki(Card pickedCard, CardColor takiColor)
       throws CannotDrawCardException {
-    Card lastCard = game.leadingCard();
+    Card lastCard = GAME.leadingCard();
     IOOperations.print("Taki open");
 
     while (pickedCard != null) {
-      game.placeCard(lastCard);
+      GAME.placeCard(lastCard);
       lastCard = pickedCard;
       IOOperations.print("Top card is " + lastCard);
-      pickedCard = game.activePlayer().pickValidCard(lastCard, true, false, takiColor);
+      pickedCard = GAME.activePlayer().pickValidCard(lastCard, true, false, takiColor);
     }
 
     if (lastCard instanceof TakiCard || lastCard instanceof SuperTakiCard) {
-      game.advanceActivePlayer(1);
+      GAME.advanceActivePlayer(1);
     } else {
       IOOperations.print("Taki closed");
     }
 
-    game.playMove(lastCard, this);
+    GAME.playMove(lastCard, this);
   }
 
   @Override
   public void visitPlusCard(PlusCard card) throws CannotDrawCardException {
-    game.placeCard(card);
-    IOOperations.print("Top card is " + game.leadingCard());
-    Card pickedCard = game.activePlayer().pickValidCard(game.leadingCard(), false, false, null);
-    game.playMove(pickedCard, this);
+    GAME.placeCard(card);
+    IOOperations.print("Top card is " + GAME.leadingCard());
+    Card pickedCard = GAME.activePlayer().pickValidCard(GAME.leadingCard(), false, false, null);
+    GAME.playMove(pickedCard, this);
   }
 
   @Override
   public void visitKingCard(KingCard card) throws CannotDrawCardException {
-    game.deactivatePlusTwoMode();
-    game.placeCard(card);
-    IOOperations.print("Top card is " + game.leadingCard());
-    Card pickedCard = game.activePlayer().pickValidCard(game.leadingCard(), true, false, null);
+    GAME.deactivatePlusTwoMode();
+    GAME.placeCard(card);
+    IOOperations.print("Top card is " + GAME.leadingCard());
+    Card pickedCard = GAME.activePlayer().pickValidCard(GAME.leadingCard(), true, false, null);
 
     if (pickedCard != null) {
-      game.playMove(pickedCard, this);
+      GAME.playMove(pickedCard, this);
     }
   }
 
   @Override
   public void visitSaveGameCard() {
-    game.changeDidPlayerExit(true);
+    GAME.changeDidPlayerExit(true);
   }
 }

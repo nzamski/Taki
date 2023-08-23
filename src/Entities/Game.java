@@ -207,7 +207,7 @@ public class Game implements Serializable {
 
   public void advanceActivePlayer(int step) {
     this.activePlayerIndex =
-        (step * this.direction().index + this.activePlayerIndex + this.numPlayers())
+        (step * this.direction().INDEX + this.activePlayerIndex + this.numPlayers())
             % this.numPlayers();
   }
 

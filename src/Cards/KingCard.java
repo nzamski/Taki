@@ -22,6 +22,6 @@ public class KingCard extends Card {
 
   @Override
   public String toString() {
-    return this.color().code + "King" + CardColor.RESET_CODE;
+    return this.color().CODE + "King" + CardColor.RESET_CODE;
   }
 }

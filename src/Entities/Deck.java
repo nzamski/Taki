@@ -11,19 +11,19 @@ import java.util.EmptyStackException;
 import java.util.Stack;
 
 public class Deck implements Serializable {
-  private final Stack<Card> cards;
+  private final Stack<Card> CARDS;
 
   public Deck() {
-    this.cards = new Stack<>();
+    this.CARDS = new Stack<>();
   }
 
   public Stack<Card> cards() {
-    return this.cards;
+    return this.CARDS;
   }
 
   public Card drawCard() throws CannotDrawCardException {
     try {
-      return this.cards.pop();
+      return this.CARDS.pop();
     } catch (EmptyStackException exception) {
       throw new CannotDrawCardException(exception.getMessage());
     }
@@ -31,14 +31,14 @@ public class Deck implements Serializable {
 
   public Card topCard() throws CannotDrawCardException {
     try {
-      return this.cards.peek();
+      return this.CARDS.peek();
     } catch (EmptyStackException exception) {
       throw new CannotDrawCardException(exception.getMessage());
     }
   }
 
   public void insertCard(Card card) {
-    this.cards.push(card);
+    this.CARDS.push(card);
   }
 
   public void loadMass(Card card, int amount) throws CloneNotSupportedException {
@@ -48,9 +48,9 @@ public class Deck implements Serializable {
   }
 
   public void shuffleDeck() {
-    Collections.shuffle(this.cards);
+    Collections.shuffle(this.CARDS);
 
-    for (Card card : this.cards) {
+    for (Card card : this.CARDS) {
       if (card instanceof ColorChangeable) {
         ((ColorChangeable) card).resetColor();
       } else if (card instanceof PlusTwoCard) {
@@ -60,6 +60,6 @@ public class Deck implements Serializable {
   }
 
   public boolean isEmpty() {
-    return this.cards.empty();
+    return this.CARDS.empty();
   }
 }
