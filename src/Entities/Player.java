@@ -4,7 +4,7 @@ import Cards.Card;
 import Cards.CardColor;
 import Cards.SaveGameCard;
 import Exceptions.IllegalMoveException;
-import Exceptions.InvalidPlayerAge;
+import Exceptions.InvalidPlayerAgeException;
 import Utils.IOOperations;
 
 import java.io.Serializable;
@@ -30,7 +30,7 @@ public class Player implements Serializable {
       try {
         this.changeAge(age);
         isAgeValid = true;
-      } catch (InvalidPlayerAge exception) {
+      } catch (InvalidPlayerAgeException exception) {
         IOOperations.printError(exception.getMessage());
       }
     }
@@ -118,11 +118,11 @@ public class Player implements Serializable {
     return this.age;
   }
 
-  public void changeAge(int age) throws InvalidPlayerAge {
+  public void changeAge(int age) throws InvalidPlayerAgeException {
     final int MINIMAL_AGE = 5;
 
     if (age < MINIMAL_AGE) {
-      throw new InvalidPlayerAge("Player's age cannot be less than " + MINIMAL_AGE);
+      throw new InvalidPlayerAgeException("Player's age cannot be less than " + MINIMAL_AGE);
     }
 
     this.age = age;

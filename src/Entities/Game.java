@@ -2,7 +2,7 @@ package Entities;
 
 import Cards.*;
 import Exceptions.CannotDrawCardException;
-import Exceptions.InvalidNumOfPlayers;
+import Exceptions.InvalidNumOfPlayersException;
 import Utils.IOOperations;
 
 import java.io.Serializable;
@@ -84,7 +84,7 @@ public class Game implements Serializable {
       try {
         this.changeNumPlayers(IOOperations.getNumber("How many players?"));
         isNumPlayersValid = true;
-      } catch (InvalidNumOfPlayers exception) {
+      } catch (InvalidNumOfPlayersException exception) {
         IOOperations.printError(exception.getMessage());
       }
     }
@@ -186,15 +186,15 @@ public class Game implements Serializable {
     return this.numPlayers;
   }
 
-  public void changeNumPlayers(int numPlayers) throws InvalidNumOfPlayers {
+  public void changeNumPlayers(int numPlayers) throws InvalidNumOfPlayersException {
     final int MINIMAL_PARTICIPANTS = 2;
     final int MAXIMAL_PARTICIPANTS = 10;
 
     if (numPlayers < MINIMAL_PARTICIPANTS) {
-      throw new InvalidNumOfPlayers(
+      throw new InvalidNumOfPlayersException(
           "Number of players cannot be less than " + MINIMAL_PARTICIPANTS);
     } else if (numPlayers > MAXIMAL_PARTICIPANTS) {
-      throw new InvalidNumOfPlayers(
+      throw new InvalidNumOfPlayersException(
           "Number of players cannot be greater than " + MAXIMAL_PARTICIPANTS);
     }
 

@@ -3,8 +3,8 @@ package Cards;
 import Entities.CardsVisitor;
 
 public class PlusTwoCard extends Card {
-  public static final int AMOUNT = 2;
   private boolean isActive;
+  public static final int AMOUNT = 2;
 
   public PlusTwoCard(CardColor color) {
     super(color);
